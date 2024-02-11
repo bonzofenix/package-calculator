@@ -1,0 +1,3 @@
+
+test:
+		docker run -it --rm -v $(PWD):/app -w /app -e GO111MODULE=on golang:1.21 go test -v ./...
