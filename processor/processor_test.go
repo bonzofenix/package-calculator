@@ -1,7 +1,7 @@
 package processor_test
 
 import (
-	"github.com/bonzofenix/package-calculator/pkg/processor"
+	"github.com/bonzofenix/package-calculator/processor"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

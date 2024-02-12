@@ -19,7 +19,7 @@ func run(ctx context.Context, w io.Writer, args []string) error {
 
 	// Start the HTTP server in a separate goroutine.
 	go func() {
-		if err := http.ListenAndServe(":3000", server); err != nil && err != http.ErrServerClosed {
+		if err := http.ListenAndServe(":8080", server); err != nil && err != http.ErrServerClosed {
 			fmt.Printf("Error starting server: %v\n", err)
 		}
 	}()
@@ -27,8 +27,8 @@ func run(ctx context.Context, w io.Writer, args []string) error {
 	// Wait for the interrupt signal.
 	<-ctx.Done()
 
-	// Additional cleanup tasks can go here.
 	fmt.Println("Server gracefully stopped")
+
 	return nil
 }
 
