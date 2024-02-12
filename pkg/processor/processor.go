@@ -1,7 +1,7 @@
 package processor
 
 import (
-	"fmt"
+	"math"
 	"sort"
 )
 
@@ -14,35 +14,85 @@ func NewProcessor() *Processor {
 }
 
 func (p *Processor) AddPackSize(packSize int) {
-	// Find where to insert element
-	i := sort.Search(len(p.packSizes), func(i int) bool { return p.packSizes[i] <= packSize })
-	// Insert  dummy element at the end of the slice to resize it
-	p.packSizes = append(p.packSizes, 0)
-	// Shift elements to the right
-	copy(p.packSizes[i+1:], p.packSizes[i:])
-	// Insert element in the right position
-	p.packSizes[i] = packSize
-
+	p.packSizes = append(p.packSizes, packSize)
 }
 
 func (p *Processor) GetPackSizes() []int {
 	return p.packSizes
 }
 
-func (p *Processor) CalculatePacks(items int) [][]int {
-	result := [][]int{}
-	pendingItems := items
+func (p *Processor) CalculatePacks(order int) map[int]int {
+	return calculatePacks(p.packSizes, order)
+}
 
-	// finds the minimum number of packs needed to fulfill the order
-	for _, packSize := range p.packSizes {
+// calculatePacks calculates the minimum number of packs required to fulfill an order,
+// based on the available pack sizes.
+func calculatePacks(packs []int, order int) map[int]int {
+	sort.Sort(sort.Reverse(sort.IntSlice(packs)))
 
-		fmt.Println(packSize, pendingItems)
+	upperOrder := calculateUpperOrder(order, packs[0])
+	packUsed := make([]int, upperOrder)
+	minPackagesForItems := initializeMinPackages(upperOrder)
 
-		if pendingItems/packSize > 0 {
-			packCount := pendingItems / packSize
-			result = append(result, []int{packSize, packCount})
-			pendingItems = pendingItems % packSize
+	populateMinPackages(order, upperOrder, packs, minPackagesForItems, packUsed)
+
+	availableOrder := findClosestGreaterOrder(order, upperOrder, minPackagesForItems)
+	result := buildResult(packs, availableOrder, packUsed)
+
+	return result
+}
+
+// calculateUpperOrder calculates the upper order that is a multiple of the largest pack size.
+// This result into the biggest permutation possible for an order which is fullfilling the order
+// with the largest pack size.
+func calculateUpperOrder(order, largestPack int) int {
+	return (order/largestPack + 1) * largestPack
+}
+
+func initializeMinPackages(upperOrder int) []int {
+	minPackagesForItems := make([]int, upperOrder)
+	for i := range minPackagesForItems {
+		minPackagesForItems[i] = math.MaxInt32
+	}
+	minPackagesForItems[0] = 0
+	return minPackagesForItems
+}
+
+// populateMinPackages populates the minPackagesForItems array and the packUsed array
+func populateMinPackages(order, upperOrder int, packs, minPackagesForItems, packUsed []int) {
+	smallestPack := packs[len(packs)-1]
+	for i := smallestPack; i < upperOrder; i++ {
+		for _, pack := range packs {
+			if i < pack {
+				continue
+			}
+			minPackageCount := minPackagesForItems[i-pack]
+			if minPackageCount != math.MaxInt32 && minPackageCount+1 < minPackagesForItems[i] {
+				minPackagesForItems[i] = minPackageCount + 1
+				packUsed[i] = pack
+			}
 		}
+	}
+}
+
+// findClosestGreaterOrder finds the order with least amount of items possible
+func findClosestGreaterOrder(order, upperOrder int, minPackagesForItems []int) int {
+	closestGreaterOrder := order
+	for i := order; i < upperOrder; i++ {
+		if minPackagesForItems[i] < minPackagesForItems[closestGreaterOrder] {
+			closestGreaterOrder = i
+		}
+	}
+	return closestGreaterOrder
+}
+
+func buildResult(packs []int, closestGreaterOrder int, packUsed []int) map[int]int {
+	result := make(map[int]int, len(packs))
+	pendingOrder := closestGreaterOrder
+	for pendingOrder > 0 {
+		packSize := packUsed[pendingOrder]
+		result[packSize]++
+		pendingOrder -= packSize
 	}
 	return result
 }
