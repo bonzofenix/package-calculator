@@ -20,7 +20,6 @@
     make docker-test
 ```
 
-
 ## Run app locally
 
 ```
@@ -34,3 +33,6 @@
     make docker-run
 ```
 
+### todo:
+
+- deploy to gcloud: https://cloud.google.com/build/docs/building/build-go
