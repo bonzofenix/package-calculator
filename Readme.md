@@ -34,7 +34,3 @@
     make docker-build
     make docker-run
 ```
-
-### todo:
-
-- deploy to gcloud: https://cloud.google.com/build/docs/building/build-go
