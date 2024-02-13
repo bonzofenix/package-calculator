@@ -10,18 +10,21 @@ type IProcessor interface {
 	CalculatePacks(packSizes []int, order int) map[int]int
 }
 
+// TODO: Remove this scruct and refactor code to just send the function around
+// to avoid the need of a struct
 type Processor struct {
-	packSizes []int
 }
 
 func NewProcessor() *Processor {
 	return &Processor{}
 }
 
-// calculatePacks calculates the minimum number of packs required to fulfill an order,
-// based on the available pack sizes.
-// Ths function uses dynamic programming to solve the problem:
-// - Calculates the upper order possible
+// Calculates the minimum number of packs required to fulfill an order,
+// based on the available pack sizes:
+// - Calculates the biggest order possible to fulfill with the largest pack size
+// - Populates an array with the minimum number of packages required to fulfill different orders
+// - Store the last pack size used to fullfill the order
+// - Rebuild the result based on the smallest order possible with the last amout of pack sizes used
 func (p *Processor) CalculatePacks(packs []int, order int) map[int]int {
 	// when there is only one pack size, the order is fulfilled right away
 	if len(packs) == 1 {
