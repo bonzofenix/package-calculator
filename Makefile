@@ -14,3 +14,7 @@ docker-build:
 
 docker-run:
 		docker run -p 8080:8080 bonzofenix/package-calculator
+
+docker-push:
+		docker tag bonzofenix/package-calculator bonzofenix/package-calculator:latest
+		docker push bonzofenix/package-calculator:latest
