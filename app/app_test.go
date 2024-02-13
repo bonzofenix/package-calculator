@@ -61,8 +61,10 @@ var _ = Describe("Server", func() {
 
 	Context("POST /calculate", func() {
 		var fakeProcessor *mockProcessor
+		var urlPath string
 
 		BeforeEach(func() {
+			urlPath = server.URL() + "/calculate"
 			fakeProcessor = &mockProcessor{}
 
 			server.AppendHandlers(
@@ -70,10 +72,12 @@ var _ = Describe("Server", func() {
 			)
 		})
 
-		It("it should re render index with response", func() {
-			resp, err := http.Post(server.URL()+"/calculate", "application/x-www-form-urlencoded", nil)
+		It("it should not fail when no data is submited", func() {
+			formData := url.Values{}
+			formEncoded := formData.Encode()
+			resp, err := http.Post(urlPath, "application/x-www-form-urlencoded", bytes.NewBufferString(formEncoded))
 			Expect(err).ShouldNot(HaveOccurred())
-			Expect(resp.StatusCode).Should(Equal(http.StatusOK))
+			Expect(resp.StatusCode).Should(Equal(http.StatusBadRequest))
 		})
 
 		It("it should send the data from the form to the processor", func() {

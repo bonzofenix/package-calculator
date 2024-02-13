@@ -17,13 +17,9 @@ func NewProcessor() *Processor {
 	return &Processor{}
 }
 
-func (p *Processor) CalculatePacks(packSizes []int, order int) map[int]int {
-	return calculatePacks(packSizes, order)
-}
-
 // calculatePacks calculates the minimum number of packs required to fulfill an order,
 // based on the available pack sizes.
-func calculatePacks(packs []int, order int) map[int]int {
+func (p *Processor) CalculatePacks(packs []int, order int) map[int]int {
 	sort.Sort(sort.Reverse(sort.IntSlice(packs)))
 
 	upperOrder := calculateUpperOrder(order, packs[0])
