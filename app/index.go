@@ -13,11 +13,11 @@ var indexContent = `
   <div class="container mt-5">
 		<h1>Package Calculator</h1>
     <form action="/calculate" method="post">
-			<div class="form-group">
+			<div class="mb-3">
 				<label for="packSizes">Pack sizes:</label>
 				<input id="packSizes" value="{{.PackSizes}}" name="packSizes" type="text" class="form-control" placeholder="Enter packages separated by ," aria-label="Number input">
 			</div>
-			<div class="form-group">
+			<div class="mb-3">
 				<label for="order">order:</label>
 				<input id="order" value="{{.Order}}" name="order" type="text" class="form-control" placeholder="Enter order size" aria-label="enter order size">
 			</div>
