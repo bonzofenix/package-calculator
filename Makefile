@@ -18,3 +18,6 @@ docker-run:
 docker-push:
 		docker tag bonzofenix/package-calculator bonzofenix/package-calculator:latest
 		docker push bonzofenix/package-calculator:latest
+
+deploy:
+	gcloud app deploy

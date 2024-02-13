@@ -19,7 +19,12 @@ func run(ctx context.Context, w io.Writer, args []string) error {
 
 	// Start the HTTP server in a separate goroutine.
 	go func() {
-		if err := http.ListenAndServe(":8080", server); err != nil && err != http.ErrServerClosed {
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = "8080"
+		}
+
+		if err := http.ListenAndServe(":"+port, server); err != nil && err != http.ErrServerClosed {
 			fmt.Printf("Error starting server: %v\n", err)
 		}
 	}()
