@@ -20,4 +20,4 @@ docker-push:
 		docker push bonzofenix/package-calculator:latest
 
 deploy:
-	gcloud app deploy
+	gcloud --quiet app deploy
