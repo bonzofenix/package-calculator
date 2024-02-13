@@ -5,6 +5,12 @@ import (
 	"sort"
 )
 
+type IProcessor interface {
+	AddPackSize(packSize int)
+	GetPackSizes() []int
+	CalculatePacks(order int) map[int]int
+}
+
 type Processor struct {
 	packSizes []int
 }

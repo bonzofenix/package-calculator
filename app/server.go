@@ -4,6 +4,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
+
+	. "github.com/bonzofenix/package-calculator/processor"
 )
 
 // ## NewServer function
@@ -12,15 +15,32 @@ import (
 func NewServer() http.Handler {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", RootHandler)
+	mux.HandleFunc("/", RootHandler())
 	return mux
 }
 
-func RootHandler(w http.ResponseWriter, r *http.Request) {
-	tmp, err := template.New("Index").Parse(indexContent)
-	if err != nil {
-		log.Fatal(err)
-	}
+func CalculateHandler(p IProcessor) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if order := r.FormValue("order"); order != "" {
+			parsedOrder, _ := strconv.Atoi(order)
+			p.CalculatePacks(parsedOrder)
+		}
 
-	tmp.Execute(w, nil)
+		tmp, err := template.New("Index").Parse(indexContent)
+		if err != nil {
+			log.Fatal(err)
+		}
+		tmp.Execute(w, nil)
+	}
+}
+
+func RootHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		tmp, err := template.New("Index").Parse(indexContent)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		tmp.Execute(w, nil)
+	}
 }
