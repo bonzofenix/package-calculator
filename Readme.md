@@ -1,5 +1,7 @@
 # Package Calculator
 
+[![Go](https://github.com/bonzofenix/package-calculator/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/bonzofenix/package-calculator/actions/workflows/go.yml)
+
 ## Running locally
 
 ```
