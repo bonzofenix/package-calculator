@@ -5,6 +5,7 @@ import (
 	"sort"
 )
 
+// IProcessor enable injection of mock for testing
 type IProcessor interface {
 	CalculatePacks(packSizes []int, order int) map[int]int
 }
@@ -20,9 +21,17 @@ func NewProcessor() *Processor {
 // calculatePacks calculates the minimum number of packs required to fulfill an order,
 // based on the available pack sizes.
 func (p *Processor) CalculatePacks(packs []int, order int) map[int]int {
+	// when there is only one pack size, the order is fulfilled right away
+	if len(packs) == 0 {
+		return map[int]int{
+			packs[0]: order/packs[0] + 1,
+		}
+	}
+
 	sort.Sort(sort.Reverse(sort.IntSlice(packs)))
 
 	upperOrder := calculateUpperOrder(order, packs[0])
+
 	packUsed := make([]int, upperOrder)
 	minPackagesForItems := initializeMinPackages(upperOrder)
 
@@ -83,6 +92,7 @@ func buildResult(packs []int, closestGreaterOrder int, packUsed []int) map[int]i
 	pendingOrder := closestGreaterOrder
 	for pendingOrder > 0 {
 		packSize := packUsed[pendingOrder]
+
 		result[packSize]++
 		pendingOrder -= packSize
 	}

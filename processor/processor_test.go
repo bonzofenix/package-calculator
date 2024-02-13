@@ -16,6 +16,11 @@ var _ = Describe("Processor", func() {
 	})
 
 	Describe("CalculatePacks", func() {
+		It("return should work for single packages", func() {
+			p := processor.NewProcessor()
+			Expect(p.CalculatePacks([]int{10}, 24)).To(Equal(map[int]int{10: 3}))
+		})
+
 		It("return 1 pack when items match available sizes", func() {
 			p := processor.NewProcessor()
 
@@ -25,7 +30,6 @@ var _ = Describe("Processor", func() {
 		It("should return the number of packs for a given size", func() {
 			p := processor.NewProcessor()
 			Expect(p.CalculatePacks([]int{23, 53, 31}, 263)).To(Equal(map[int]int{23: 2, 31: 7}))
-			//266 - 6
 		})
 	})
 })
