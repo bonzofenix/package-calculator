@@ -21,12 +21,19 @@ func NewServer() http.Handler {
 
 func CalculateHandler(p IProcessor) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		parsedOrder := 0
+		parsedPackageSizes := []int{}
+
 		if order := r.FormValue("order"); order != "" {
-			parsedOrder, _ := strconv.Atoi(order)
-			p.CalculatePacks(parsedOrder)
+			parsedOrder, _ = strconv.Atoi(order)
 		}
 
+		// TODO: parsed package sizes, separte them by comma
+
+		p.CalculatePacks(parsedPackageSizes, parsedOrder)
+
 		tmp, err := template.New("Index").Parse(indexContent)
+
 		if err != nil {
 			log.Fatal(err)
 		}

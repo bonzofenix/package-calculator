@@ -18,7 +18,7 @@ type mockProcessor struct {
 	AddPackSizesCalledWith   []int
 }
 
-func (m *mockProcessor) CalculatePacks(order int) map[int]int {
+func (m *mockProcessor) CalculatePacks(packSizes []int, order int) map[int]int {
 
 	m.CalculatePacksCalledWith = append(m.CalculatePacksCalledWith, order)
 	return map[int]int{}

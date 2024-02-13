@@ -6,9 +6,7 @@ import (
 )
 
 type IProcessor interface {
-	AddPackSize(packSize int)
-	GetPackSizes() []int
-	CalculatePacks(order int) map[int]int
+	CalculatePacks(packSizes []int, order int) map[int]int
 }
 
 type Processor struct {
@@ -19,16 +17,8 @@ func NewProcessor() *Processor {
 	return &Processor{}
 }
 
-func (p *Processor) AddPackSize(packSize int) {
-	p.packSizes = append(p.packSizes, packSize)
-}
-
-func (p *Processor) GetPackSizes() []int {
-	return p.packSizes
-}
-
-func (p *Processor) CalculatePacks(order int) map[int]int {
-	return calculatePacks(p.packSizes, order)
+func (p *Processor) CalculatePacks(packSizes []int, order int) map[int]int {
+	return calculatePacks(packSizes, order)
 }
 
 // calculatePacks calculates the minimum number of packs required to fulfill an order,
