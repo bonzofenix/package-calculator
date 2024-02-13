@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	. "github.com/bonzofenix/package-calculator/processor"
 )
@@ -28,7 +29,14 @@ func CalculateHandler(p IProcessor) http.HandlerFunc {
 			parsedOrder, _ = strconv.Atoi(order)
 		}
 
-		// TODO: parsed package sizes, separte them by comma
+		// Parsed package sizes, separte them by comma
+		if packSizes := r.FormValue("packSizes"); packSizes != "" {
+			packs := strings.Split(packSizes, ",")
+			parsedPackageSizes = make([]int, len(packs))
+			for i, pack := range packs {
+				parsedPackageSizes[i], _ = strconv.Atoi(pack)
+			}
+		}
 
 		p.CalculatePacks(parsedPackageSizes, parsedOrder)
 

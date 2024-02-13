@@ -14,22 +14,20 @@ import (
 )
 
 type mockProcessor struct {
-	CalculatePacksCalledWith []int
-	AddPackSizesCalledWith   []int
+	CalculatePacksCalledWith []calculatePacksArguments
+}
+
+type calculatePacksArguments struct {
+	PackSizes []int
+	Order     int
 }
 
 func (m *mockProcessor) CalculatePacks(packSizes []int, order int) map[int]int {
+	arguments := calculatePacksArguments{packSizes, order}
 
-	m.CalculatePacksCalledWith = append(m.CalculatePacksCalledWith, order)
+	m.CalculatePacksCalledWith = append(m.CalculatePacksCalledWith, arguments)
+
 	return map[int]int{}
-}
-
-func (m *mockProcessor) AddPackSize(packSize int) {
-	m.AddPackSizesCalledWith = append(m.AddPackSizesCalledWith, packSize)
-}
-
-func (m *mockProcessor) GetPackSizes() []int {
-	return []int{}
 }
 
 var _ = Describe("Server", func() {
@@ -90,7 +88,9 @@ var _ = Describe("Server", func() {
 			Expect(err).ShouldNot(HaveOccurred())
 			Expect(resp.StatusCode).Should(Equal(http.StatusOK))
 			Expect(fakeProcessor.CalculatePacksCalledWith).Should(HaveLen(1))
-			Expect(fakeProcessor.CalculatePacksCalledWith[0]).Should(Equal(300))
+
+			Expect(fakeProcessor.CalculatePacksCalledWith[0].PackSizes).Should(Equal([]int{100, 200, 300}))
+			Expect(fakeProcessor.CalculatePacksCalledWith[0].Order).Should(Equal(300))
 		})
 	})
 })
