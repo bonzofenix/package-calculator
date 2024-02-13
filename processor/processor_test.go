@@ -16,7 +16,7 @@ var _ = Describe("Processor", func() {
 	})
 
 	Describe("CalculatePacks", func() {
-		It("return should work for single packages", func() {
+		It("should work when only 1 package is supplied", func() {
 			p := processor.NewProcessor()
 			Expect(p.CalculatePacks([]int{10}, 24)).To(Equal(map[int]int{10: 3}))
 		})

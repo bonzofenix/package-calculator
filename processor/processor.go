@@ -20,16 +20,17 @@ func NewProcessor() *Processor {
 
 // calculatePacks calculates the minimum number of packs required to fulfill an order,
 // based on the available pack sizes.
+// Ths function uses dynamic programming to solve the problem:
+// - Calculates the upper order possible
 func (p *Processor) CalculatePacks(packs []int, order int) map[int]int {
 	// when there is only one pack size, the order is fulfilled right away
-	if len(packs) == 0 {
+	if len(packs) == 1 {
 		return map[int]int{
 			packs[0]: order/packs[0] + 1,
 		}
 	}
 
 	sort.Sort(sort.Reverse(sort.IntSlice(packs)))
-
 	upperOrder := calculateUpperOrder(order, packs[0])
 
 	packUsed := make([]int, upperOrder)
