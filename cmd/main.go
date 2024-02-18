@@ -24,16 +24,16 @@ func run(ctx context.Context, w io.Writer, args []string) error {
 			port = "8080"
 		}
 
+		fmt.Printf("listening on port %s\n", port)
 		if err := http.ListenAndServe(":"+port, server); err != nil && err != http.ErrServerClosed {
 			fmt.Printf("Error starting server: %v\n", err)
 		}
+
 	}()
 
 	// Wait for the interrupt signal.
 	<-ctx.Done()
-
 	fmt.Println("Server gracefully stopped")
-
 	return nil
 }
 

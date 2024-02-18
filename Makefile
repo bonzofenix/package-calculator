@@ -7,7 +7,7 @@ watch:
 		ginkgo watch ./...
 
 run:
-		go run main.go
+		go run cmd/main.go
 
 docker-build:
 		docker build -t bonzofenix/package-calculator .

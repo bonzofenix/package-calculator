@@ -13,7 +13,7 @@ COPY . .
 
 # Build the Go app
 ENV CGO_ENABLED=0
-RUN go build -o cmd/app .
+RUN go build  -o cmd/app cmd/main.go
 
 # Start a new stage from scratch
 FROM alpine:latest
